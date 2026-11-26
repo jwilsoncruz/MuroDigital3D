@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muro de Auspiciadores 3D</title>
+<style>
+:root{--bg:#07080d;--bg2:#141a2e;--tx:#f4f1ea;--mut:#9aa0b4;--gold:#d9b76a;--l1:26%;--l2:9%;--sq1:#12141d;--sq2:#1b1f2c;--line:rgba(255,255,255,.12);--sh:rgba(0,0,0,.6);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eceae4;--bg2:#fbfaf7;--tx:#16171d;--mut:#5d6274;--l1:90%;--l2:78%;--sq1:#d9d5c9;--sq2:#f4f1e8;--line:rgba(0,0,0,.14);--sh:rgba(40,30,10,.35)}}
+:root[data-theme="light"]{--bg:#eceae4;--bg2:#fbfaf7;--tx:#16171d;--mut:#5d6274;--l1:90%;--l2:78%;--sq1:#d9d5c9;--sq2:#f4f1e8;--line:rgba(0,0,0,.14);--sh:rgba(40,30,10,.35)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{background:radial-gradient(1200px 700px at 50% -10%,var(--bg2),var(--bg));color:var(--tx);font-family:"Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;overflow-x:hidden}
+header{text-align:center;padding:34px 16px 8px}
+header small{letter-spacing:.4em;text-transform:uppercase;color:var(--gold);font-size:12px}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(28px,5vw,52px);margin:8px 0 4px}
+header p{color:var(--mut);margin:0}
+nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:20px 12px}
+button,select,input{font:inherit;color:var(--tx)}
+nav button,.arr,.btn{background:transparent;border:1px solid var(--line);padding:10px 18px;border-radius:99px;cursor:pointer;font-size:14px;transition:.3s}
+nav button:hover,.arr:hover,.btn:hover{border-color:var(--gold)}
+nav button.on,.btn.pri{background:var(--gold);color:#111;border-color:var(--gold);font-weight:600}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 60px;position:relative}
+.wall{perspective:1500px;min-height:440px;position:relative}
+.slot{transform-style:preserve-3d}
+.tile{position:relative;width:100%;height:100%;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;background:var(--tbg,linear-gradient(145deg,hsl(var(--h) 55% var(--l1)),hsl(var(--h) 45% var(--l2))));box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 24px 40px -18px var(--sh);transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;overflow:hidden;transform-style:preserve-3d;cursor:pointer}
+.tile::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.38),transparent 55%);opacity:var(--go,0);transition:opacity .3s;pointer-events:none}
+.tile .logo{width:46%;max-width:110px;transform:translateZ(50px);filter:drop-shadow(0 10px 8px rgba(0,0,0,.4))}
+.tile img.logo{max-height:46%;object-fit:contain;border-radius:10px}
+.tile b{font-family:Georgia,serif;font-size:clamp(13px,1.6vw,19px);font-weight:600;transform:translateZ(30px);color:var(--ttx,var(--tx))}
+.tile small{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);transform:translateZ(20px)}
+.in{animation:var(--an,in) .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes az{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+@keyframes as{from{opacity:0;transform:translateX(-140px) rotateY(60deg)}to{opacity:1;transform:none}}
+@keyframes ab{0%{opacity:0;transform:translateY(-320px)}60%{opacity:1;transform:translateY(30px)}80%{transform:translateY(-12px)}100%{transform:none}}
+@keyframes af{from{opacity:0;transform:rotateY(180deg) scale(.6)}to{opacity:1;transform:none}}
+@keyframes in{from{opacity:0;transform:rotateX(-70deg) translateZ(-200px) translateY(40px)}to{opacity:1;transform:none}}
+.car{height:480px}
+.car .slot{position:absolute;left:50%;top:50%;width:var(--w);height:calc(var(--w)*1.3);transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .6s}
+.arr{position:absolute;top:50%;z-index:9;width:46px;height:46px;padding:0;font-size:20px;background:var(--bg2)}
+#pv{left:6px}#nx{right:6px}.hide{display:none}
+.mos{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:150px;grid-auto-flow:dense;gap:14px;padding:10px 0}
+.mos .p{grid-column:span 2;grid-row:span 2}
+.chess{display:grid;grid-template-columns:repeat(6,1fr);padding:10px 0;box-shadow:0 0 0 1px var(--line);border-radius:14px}
+.chess>*{aspect-ratio:1;min-width:0}
+.sq{background:var(--sq1)}.sq.b{background:var(--sq2)}
+.chess .slot{padding:6px}
+.ringwrap{height:520px;transform:rotateX(-10deg);transform-style:preserve-3d}
+.ring{position:absolute;left:50%;top:52%;width:0;height:0;transform-style:preserve-3d;animation:spin var(--spd,24s) linear infinite}
+.ring:hover{animation-play-state:paused}
+.ring .slot{position:absolute;width:var(--w);height:calc(var(--w)*1.25);left:calc(var(--w)/-2);top:calc(var(--w)*-.62)}
+@keyframes spin{to{transform:rotateY(-360deg)}}
+.shine .tile::before{content:"";position:absolute;inset:-50%;background:linear-gradient(100deg,transparent 42%,rgba(255,255,255,.38) 50%,transparent 58%);transform:translateX(-120%);animation:sw 4.5s ease-in-out infinite;animation-delay:var(--d,0s);pointer-events:none;z-index:2}
+@keyframes sw{60%,100%{transform:translateX(120%)}}
+.pres{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;height:540px;text-align:center}
+.pres.t0::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%,color-mix(in srgb,var(--gold) 30%,transparent),transparent 65%);animation:pop 1.4s both}
+.pres .pl{width:min(250px,60vw);height:min(320px,76vw);animation:pop 1s cubic-bezier(.2,1.2,.3,1) both;z-index:1}
+@keyframes pop{from{opacity:0;transform:scale(.2) rotateY(180deg)}to{opacity:1;transform:none}}
+.halo{position:absolute;left:50%;top:36%;width:300px;height:300px;margin:-150px;border-radius:50%;border:2px solid var(--gold);opacity:0;animation:ring 2.6s ease-out infinite}.halo.h2{animation-delay:1.3s}
+@keyframes ring{from{transform:scale(.5);opacity:.8}to{transform:scale(2.8);opacity:0}}
+.pres h2{font-family:Georgia,serif;font-weight:400;font-size:clamp(28px,6vw,64px);margin:0;z-index:1;perspective:600px}
+.pres h2 span{display:inline-block;opacity:0;animation:lt .6s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes lt{from{opacity:0;transform:translateY(40px) rotateX(-90deg)}to{opacity:1;transform:none}}
+.pres .tg{letter-spacing:.4em;text-transform:uppercase;color:var(--gold);font-size:13px;opacity:0;animation:lt .8s 1.3s forwards;z-index:1}
+body.tv .pres{height:70vh}
+.help{right:66px}
+.vtag{position:fixed;left:12px;bottom:calc(8px + env(safe-area-inset-bottom,0px));font-size:11px;color:var(--mut);opacity:.7;z-index:5}
+.lnk{background:none;border:0;color:var(--gold);cursor:pointer;text-decoration:underline;font-size:12px;padding:0}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:70;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}.modal.open{display:flex}
+.card{background:var(--bg2);color:var(--tx);border:1px solid var(--line);border-radius:18px;max-width:580px;max-height:88vh;overflow:auto;padding:24px}
+.card h2{font-family:Georgia,serif;font-weight:400;margin:0 0 6px}.card h4{color:var(--gold);margin:18px 0 6px;font-weight:600}.card li{margin:6px 0;font-size:14px;line-height:1.45}.card ul,.card ol{padding-left:20px;margin:0}
+body.tv .vtag{display:none}
+footer{text-align:center;color:var(--mut);font-size:12px;padding-bottom:30px}
+.gear{position:fixed;right:14px;top:calc(14px + env(safe-area-inset-top,0px));z-index:40;width:44px;height:44px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);cursor:pointer;font-size:20px}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);background:var(--bg2);border-left:1px solid var(--line);transform:translateX(105%);transition:.4s;z-index:50;overflow-y:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));box-shadow:-20px 0 50px var(--sh)}
+.panel.open{transform:none}
+.panel h3{font-family:Georgia,serif;font-weight:400;margin:22px 0 8px;color:var(--gold);font-size:17px}
+.panel label{display:block;font-size:12px;color:var(--mut);margin:10px 0 4px}
+.panel input[type=text],.panel select,.panel textarea{width:100%;background:transparent;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:14px;color:var(--tx)}
+.panel select option{color:#111}
+.panel input[type=range]{width:100%;accent-color:var(--gold)}
+.panel textarea{height:90px;font-family:monospace;font-size:11px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sp{border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:8px;display:grid;grid-template-columns:1fr 92px;gap:6px}
+.sp .btn{padding:4px 10px;font-size:12px}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;margin:4px 12px 4px 0;color:var(--tx)!important}
+.tvbar{display:none;position:fixed;left:0;bottom:0;height:4px;background:var(--gold);z-index:60;width:100%;transform-origin:left;animation:bar var(--tv) linear forwards}
+@keyframes bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.tvx{display:none;position:fixed;top:14px;right:14px;z-index:60;opacity:0;transition:.3s}
+body.tv .tvbar{display:block}body.tv .tvx{display:block}body.tv.show .tvx{opacity:1}
+body.tv{cursor:none}body.tv.show{cursor:default}
+body.tv nav,body.tv footer,body.tv .gear,body.tv .panel{display:none}
+body.tv header{padding-top:18px}body.tv .car{height:70vh}body.tv .ringwrap{height:70vh}body.tv .wrap{max-width:1500px}
+@media(max-width:700px){.mos{grid-template-columns:repeat(2,1fr);grid-auto-rows:130px}.chess .tile b{font-size:10px}.chess .tile small{display:none}.car{height:420px}}
+</style>
+</head>
+<body>
+<button class="gear" id="gear" aria-label="Configuración">⚙</button>
+<button class="btn tvx" id="tvx">Salir del modo TV</button><div class="tvbar" id="bar"></div>
+<header><small>Con el apoyo de</small><h1 id="h1"></h1><p id="sub"></p></header>
+<nav id="nav"></nav>
+<div class="wrap"><button class="arr hide" id="pv" aria-label="Anterior">‹</button><div class="wall" id="wall"></div><button class="arr hide" id="nx" aria-label="Siguiente">›</button></div>
+<footer>Pasa el cursor sobre cada logo · flechas ← → para navegar · <span id="ver"></span> · <button class="lnk" id="help">Guía de inicio rápido</button></footer>
+<aside class="panel" id="P"></aside>
+<button class="gear help" id="help2" aria-label="Guía rápida">?</button><div class="vtag" id="vtag"></div><div class="modal" id="M"></div>
+<script>
+const MODES=[["individual","Individual"],["linea","En línea"],["mosaico","Mosaico"],["ajedrez","Ajedrez"],["anillo","Anillo 3D"],["presentacion","Presentación"]];
+const NM=["Aurora Bank","Nexo Telecom","Volta Energy","Andes Motors","Solaris Foods","Kairos Capital","Zenit Tech","Orbita Media","Lumen Salud","Terra Agro","Vértice Seguros","Pampa Brew"],HU=[210,265,45,8,32,285,190,330,150,110,240,20];
+const DEF={anim:"giro",shine:true,bg:"",tileBg:"hue",tileColor:"#1c2340",title:"Muro de Auspiciadores",sub:"Elige cómo quieres verlos",accent:"#d9b76a",theme:"auto",tilt:1,speed:2.8,tvSecs:12,tvModes:["presentacion","linea","mosaico","ajedrez","anillo","individual"],mode:"linea",sp:NM.map((n,i)=>({n,t:i<2?"Platino":i<6?"Oro":"Plata",h:HU[i],img:""}))};
+let C;try{C={...DEF,...JSON.parse(localStorage.getItem("muro")||"{}")}}catch(e){C=structuredClone(DEF)}
+let mode=C.mode,idx=0,timer,hover=false,tv=false,tvT,tvI=0,rt;
+const $=id=>document.getElementById(id),wall=$("wall"),P=$("P");
+const save=()=>{try{localStorage.setItem("muro",JSON.stringify(C))}catch(e){}};
+const shapes=[c=>`<circle cx="50" cy="50" r="44" ${c}/>`,c=>`<polygon points="50,5 92,28 92,72 50,95 8,72 8,28" ${c}/>`,c=>`<polygon points="50,4 96,50 50,96 4,50" ${c}/>`,c=>`<rect x="8" y="8" width="84" height="84" rx="20" ${c}/>`];
+function logo(i){const s=C.sp[i];if(s.img)return`<img class="logo" src="${s.img}" alt="">`;return`<svg class="logo" viewBox="0 0 100 100">${shapes[i%4]('fill="rgba(255,255,255,.12)" stroke="'+C.accent+'" stroke-width="2.5"')}<text x="50" y="62" text-anchor="middle" font-family="Georgia,serif" font-size="36" style="fill:var(--ttx,#f4f1ea)" font-weight="700">${(s.n||"?").slice(0,2).toUpperCase()}</text></svg>`}
+function tile(i){const s=C.sp[i],el=document.createElement("div");el.className="tile";el.style.setProperty("--d",(Math.random()*4).toFixed(1)+"s");el.style.setProperty("--h",s.h);
+const b=document.createElement("b");b.textContent=s.n;const t=document.createElement("small");t.textContent=s.t;
+el.innerHTML=logo(i);el.append(b,t);
+el.addEventListener("pointermove",e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height,k=26*C.tilt;
+el.style.setProperty("--ry",(x-.5)*k+"deg");el.style.setProperty("--rx",(.5-y)*k+"deg");el.style.setProperty("--gx",x*100+"%");el.style.setProperty("--gy",y*100+"%");el.style.setProperty("--go",1)});
+el.addEventListener("pointerleave",()=>{el.style.setProperty("--rx","0deg");el.style.setProperty("--ry","0deg");el.style.setProperty("--go",0)});return el}
+function slot(i,cls){const s=document.createElement("div");s.className="slot "+(cls||"");s.appendChild(tile(i));return s}
+const isCar=()=>mode==="individual"||mode==="linea";
+function place(){if(!isCar())return;const W=wall.clientWidth,one=mode==="individual",w=one?Math.min(W*.7,tv?460:340):Math.min(W*.42,tv?300:230),n=C.sp.length;wall.style.setProperty("--w",w+"px");
+[...wall.children].forEach((s,i)=>{let d=i-idx;if(d>n/2)d-=n;if(d<-n/2)d+=n;const a=Math.abs(d);
+if(one){s.style.transform=`translate(-50%,-50%) translateX(${d*60}%) rotateY(${-d*70}deg) scale(${d?.6:1.12})`;s.style.opacity=a?0:1;s.style.pointerEvents=a?"none":"auto"}
+else{s.style.transform=`translate(-50%,-50%) translateX(${d*w*.78}px) translateZ(${-a*140}px) rotateY(${-Math.sign(d)*Math.min(a,1)*48}deg)`;s.style.opacity=a>2?0:1-a*.22;s.style.zIndex=10-a;s.style.pointerEvents=a>2?"none":"auto"}})}
+function render(){const n=C.sp.length;clearTimeout(presT);presI=0;if(C.anim==="azar")document.documentElement.style.setProperty("--an",["in","az","as","ab","af"][Math.random()*5|0]);wall.innerHTML="";wall.className="wall";wall.style.removeProperty("--w");$("pv").classList.toggle("hide",!isCar());$("nx").classList.toggle("hide",!isCar());idx%=Math.max(n,1);
+if(isCar()){wall.classList.add("car");C.sp.forEach((_,i)=>{const s=slot(i);s.onclick=()=>{idx=i;place()};wall.appendChild(s)});place()}
+else if(mode==="mosaico"){wall.classList.add("mos");C.sp.forEach((s,i)=>{const e=slot(i,"in"+(s.t==="Platino"?" p":""));e.style.animationDelay=i*70+"ms";wall.appendChild(e)})}
+else if(mode==="ajedrez"){wall.classList.add("chess");let k=0;const rows=Math.max(2,Math.ceil(n/3));for(let r=0;r<rows;r++)for(let c=0;c<6;c++){const d=(r+c)%2===0;let e;if(d&&k<n)e=slot(k++,"in");else{e=document.createElement("div");e.className="sq in"+(d?" b":"")}e.style.animationDelay=(r*6+c)*35+"ms";wall.appendChild(e)}}
+else if(mode==="presentacion"){presShow()}
+else{wall.classList.add("ringwrap");const w=Math.min(wall.clientWidth*.3,200),R=Math.max(w/2/Math.tan(Math.PI/Math.max(n,3))+30,w*1.1),ring=document.createElement("div");ring.className="ring";ring.style.setProperty("--spd",Math.max(C.speed,1)*9+"s");wall.style.setProperty("--w",w+"px");
+C.sp.forEach((_,i)=>{const s=slot(i);s.style.transform=`rotateY(${i*360/n}deg) translateZ(${R}px)`;ring.appendChild(s)});wall.appendChild(ring)}}
+const VER="1.3.0",LOG=[["1.3.0","Guía de inicio rápido, versión visible, vista Presentación, 5 animaciones de entrada (y aleatoria) y destello brillante."],["1.2.0","Fondo de la página y de los cuadros."],["1.1.0","Panel de configuración, modo TV y Anillo 3D."],["1.0.0","Muro inicial: Individual, En línea, Mosaico y Ajedrez."]],AM={giro:"in",zoom:"az",slide:"as",rebote:"ab",flip:"af"},TI=["Platino","Oro","Plata"];
+let presT,presI=0;
+function presShow(){const o=C.sp.map((_,i)=>i).sort((a,b)=>TI.indexOf(C.sp[a].t)-TI.indexOf(C.sp[b].t)),i=o[presI++%o.length],s=C.sp[i];wall.innerHTML="";const d=document.createElement("div");d.className="pres t"+Math.max(TI.indexOf(s.t),0);d.innerHTML='<i class="halo"></i><i class="halo h2"></i>';const sl=slot(i);sl.classList.add("pl");d.appendChild(sl);const h=document.createElement("h2");[...s.n].forEach((c,k)=>{const x=document.createElement("span");x.textContent=c===" "?"\u00a0":c;x.style.animationDelay=.5+k*.045+"s";h.appendChild(x)});const g=document.createElement("div");g.className="tg";g.textContent="Auspiciador "+s.t;d.append(h,g);wall.appendChild(d);presT=setTimeout(presShow,Math.max(C.speed,1.5)*1000+1800)}
+function guide(){const M=$("M");M.innerHTML=`<div class="card"><h2>Guía de inicio rápido</h2><small style="color:var(--mut)">Versión ${VER}</small><h4>En 5 pasos</h4><ol><li><b>Elige una vista</b> con los botones de arriba: Individual, En línea, Mosaico, Ajedrez, Anillo 3D o Presentación.</li><li><b>Personaliza</b> con el botón ⚙: textos, colores, fondos, animaciones y velocidad.</li><li><b>Carga tus auspiciadores</b> en ⚙ → Auspiciadores: nombre, nivel, color y su logo (mejor PNG con fondo transparente).</li><li><b>Modo TV:</b> ⚙ → «Iniciar modo TV». Rota solo entre las vistas que elijas. Esc para salir.</li><li><b>Comparte la configuración</b> copiando el JSON del panel.</li></ol><h4>Atajos</h4><ul><li>← → cambian de logo en Individual y En línea.</li><li>Pasa el cursor sobre un logo para el efecto 3D.</li><li>Esc sale del modo TV; mueve el mouse para ver el botón de salida.</li></ul><h4>Historial de versiones</h4><ul>${LOG.map(([v,t])=>`<li><b>v${v}</b> · ${t}</li>`).join("")}</ul><div style="margin-top:18px"><button class="btn pri" id="gok">Entendido</button></div></div>`;M.classList.add("open");const c=()=>M.classList.remove("open");$("gok").onclick=c;M.onclick=e=>{if(e.target===M)c()}}
+$("help").onclick=$("help2").onclick=guide;$("vtag").textContent="v"+VER;$("ver").textContent="v"+VER;
+const rer=()=>{clearTimeout(rt);rt=setTimeout(render,200)};
+function go(d){const n=C.sp.length;idx=(idx+d+n)%n;place()}
+function tick(){clearInterval(timer);timer=setInterval(()=>{if(!hover&&isCar())go(1)},C.speed*1000)}
+function apply(){$("h1").textContent=C.title;$("sub").textContent=C.sub;document.title=C.title;document.documentElement.style.setProperty("--gold",C.accent);
+const R=document.documentElement.style,lum=h=>{const n=parseInt(h.slice(1),16);return(.299*(n>>16)+.587*(n>>8&255)+.114*(n&255))/255};
+if(C.bg){const l=lum(C.bg)>.5,m=l?"#000":"#fff";R.setProperty("--bg",C.bg);R.setProperty("--bg2",`color-mix(in srgb,${C.bg},${m} 8%)`);R.setProperty("--sq1",`color-mix(in srgb,${C.bg},${m} 5%)`);R.setProperty("--sq2",`color-mix(in srgb,${C.bg},${m} 14%)`);R.setProperty("--tx",l?"#16171d":"#f4f1ea");R.setProperty("--mut",l?"#5d6274":"#9aa0b4")}else["--bg","--bg2","--sq1","--sq2","--tx","--mut"].forEach(p=>R.removeProperty(p));
+let bgv="",tx="";const tc=C.tileColor;
+if(C.tileBg==="color"){bgv=`linear-gradient(145deg,${tc},color-mix(in srgb,${tc},#000 35%))`;tx=lum(tc)>.6?"#16171d":"#f4f1ea"}else if(C.tileBg==="white"){bgv="linear-gradient(145deg,#ffffff,#e8e4da)";tx="#16171d"}else if(C.tileBg==="glass")bgv="linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.04))";
+bgv?R.setProperty("--tbg",bgv):R.removeProperty("--tbg");tx?R.setProperty("--ttx",tx):R.removeProperty("--ttx");
+R.setProperty("--an",AM[C.anim]||"in");document.body.classList.toggle("shine",!!C.shine);
+if(C.theme==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",C.theme);save()}
+const nav=$("nav");MODES.forEach(([k,l])=>{const b=document.createElement("button");b.textContent=l;b.dataset.k=k;b.onclick=()=>{mode=C.mode=k;apply();sync();render()};nav.appendChild(b)});
+const sync=()=>[...nav.children].forEach(b=>b.classList.toggle("on",b.dataset.k===mode));
+/* panel */
+const E=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+function panel(){P.innerHTML=`<div class="row" style="justify-content:space-between"><b style="font-size:18px">Configuración <small style="color:var(--mut);font-weight:400">v${VER}</small></b><button class="btn" id="cl">Cerrar</button></div>
+<h3>Textos</h3><label>Título</label><input type="text" data-k="title" value="${E(C.title)}"><label>Subtítulo</label><input type="text" data-k="sub" value="${E(C.sub)}">
+<h3>Apariencia</h3><label>Color de acento</label><input type="color" data-k="accent" value="${C.accent}"><label>Tema</label><select data-k="theme">${[["auto","Automático"],["dark","Oscuro"],["light","Claro"]].map(([v,l])=>`<option value="${v}"${C.theme===v?" selected":""}>${l}</option>`).join("")}</select>
+<label>Fondo de la página</label><div class="row"><input type="color" data-k="bg" value="${C.bg||"#07080d"}"><button class="btn" id="bgx">Automático</button></div><label>Fondo de los cuadros</label><select data-k="tileBg">${[["hue","Color propio de cada auspiciador"],["color","Color único"],["white","Blanco (para logos con fondo)"],["glass","Cristal translúcido"]].map(([v,l])=>`<option value="${v}"${C.tileBg===v?" selected":""}>${l}</option>`).join("")}</select><label>Color único de los cuadros</label><input type="color" data-k="tileColor" value="${C.tileColor}">
+<label>Animación de entrada</label><select data-k="anim">${[["giro","Giro 3D"],["zoom","Zoom"],["slide","Deslizar"],["rebote","Rebote"],["flip","Voltear"],["azar","Aleatoria"]].map(([v,l])=>`<option value="${v}"${C.anim===v?" selected":""}>${l}</option>`).join("")}</select><label class="chk"><input type="checkbox" data-k="shine"${C.shine?" checked":""}>Destello brillante sobre los cuadros</label>
+<label>Intensidad del efecto 3D (${C.tilt})</label><input type="range" data-k="tilt" min="0" max="2" step=".1" value="${C.tilt}"><label>Velocidad: segundos por logo (${C.speed})</label><input type="range" data-k="speed" min="1" max="8" step=".2" value="${C.speed}">
+<label>Vista inicial</label><select data-k="mode">${MODES.map(([v,l])=>`<option value="${v}"${C.mode===v?" selected":""}>${l}</option>`).join("")}</select>
+<h3>Modo TV (automático)</h3><label>Segundos por vista (${C.tvSecs})</label><input type="range" data-k="tvSecs" min="5" max="40" value="${C.tvSecs}"><label>Vistas incluidas</label>${MODES.map(([v,l])=>`<label class="chk"><input type="checkbox" data-m="${v}"${C.tvModes.includes(v)?" checked":""}>${l}</label>`).join("")}<div style="margin-top:10px"><button class="btn pri" id="tvgo">▶ Iniciar modo TV</button></div>
+<h3>Auspiciadores</h3>${C.sp.map((s,i)=>`<div class="sp"><input type="text" data-i="${i}" data-f="n" value="${E(s.n)}" placeholder="Nombre"><select data-i="${i}" data-f="t">${["Platino","Oro","Plata"].map(t=>`<option${s.t===t?" selected":""}>${t}</option>`).join("")}</select><input type="range" data-i="${i}" data-f="h" min="0" max="360" value="${s.h}" title="Color"><div class="row"><label class="btn" style="margin:0">Logo<input type="file" accept="image/*" data-i="${i}" hidden></label>${s.img?`<button class="btn" data-x="${i}">Quitar</button>`:""}<button class="btn" data-d="${i}">🗑</button></div></div>`).join("")}<button class="btn" id="add">+ Agregar auspiciador</button>
+<h3>Datos (JSON)</h3><textarea id="js">${E(JSON.stringify({...C,sp:C.sp.map(s=>({...s,img:s.img?"(imagen)":""}))},null,1))}</textarea><div class="row" style="margin-top:8px"><button class="btn" id="imp">Aplicar JSON</button><button class="btn" id="rst">Restablecer</button></div>`;
+$("cl").onclick=()=>P.classList.remove("open");$("bgx").onclick=()=>{C.bg="";apply();panel();rer()};$("tvgo").onclick=tvStart;
+$("add").onclick=()=>{C.sp.push({n:"Nuevo auspiciador",t:"Plata",h:Math.floor(Math.random()*360),img:""});apply();panel();render()};
+$("rst").onclick=()=>{C=structuredClone(DEF);mode=C.mode;apply();sync();panel();render();tick()};
+$("imp").onclick=()=>{try{const j=JSON.parse($("js").value);j.sp=(j.sp||C.sp).map((s,i)=>({...s,img:s.img==="(imagen)"?(C.sp[i]||{}).img||"":s.img}));C={...C,...j};apply();sync();panel();render();tick()}catch(e){$("js").value="JSON inválido: "+e.message}}}
+P.addEventListener("input",e=>{const t=e.target,k=t.dataset.k,i=t.dataset.i;
+if(k){C[k]=t.type==="range"?+t.value:t.type==="checkbox"?t.checked:t.value;if(k==="mode"){mode=t.value;sync()}apply();if(k==="speed")tick();if(["tilt","speed","tvSecs"].includes(k))t.previousElementSibling.textContent=t.previousElementSibling.textContent.replace(/\([^)]*\)/,"("+t.value+")");rer()}
+else if(i!==undefined&&t.dataset.f){C.sp[i][t.dataset.f]=t.dataset.f==="h"?+t.value:t.value;save();rer()}
+else if(t.dataset.m){C.tvModes=MODES.map(m=>m[0]).filter(m=>m===t.dataset.m?t.checked:C.tvModes.includes(m));save()}});
+P.addEventListener("change",e=>{const t=e.target;if(t.type!=="file"||!t.files[0])return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,260/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);C.sp[t.dataset.i].img=c.toDataURL("image/png");apply();panel();render()};im.src=r.result};r.readAsDataURL(t.files[0])});
+P.addEventListener("click",e=>{const d=e.target.dataset;if(d.d!==undefined&&C.sp.length>1){C.sp.splice(+d.d,1);apply();panel();render()}if(d.x!==undefined){C.sp[+d.x].img="";apply();panel();render()}});
+$("gear").onclick=()=>{panel();P.classList.add("open")};
+/* modo TV */
+function tvStep(){if(!tv)return;const ms=C.tvModes.length?C.tvModes:["linea"];mode=ms[tvI++%ms.length];sync();render();const b=$("bar");b.style.setProperty("--tv",C.tvSecs+"s");b.style.animation="none";void b.offsetWidth;b.style.animation="";tvT=setTimeout(tvStep,C.tvSecs*1000)}
+function tvStart(){tv=true;tvI=0;P.classList.remove("open");document.body.classList.add("tv");try{document.documentElement.requestFullscreen().catch(()=>{})}catch(e){}tvStep()}
+function tvStop(){tv=false;clearTimeout(tvT);document.body.classList.remove("tv","show");try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}mode=C.mode;sync();render()}
+$("tvx").onclick=tvStop;let st;addEventListener("pointermove",()=>{if(!tv)return;document.body.classList.add("show");clearTimeout(st);st=setTimeout(()=>document.body.classList.remove("show"),2500)});
+document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&tv)tvStop()});
+$("pv").onclick=()=>go(-1);$("nx").onclick=()=>go(1);
+wall.addEventListener("pointerenter",()=>hover=true);wall.addEventListener("pointerleave",()=>hover=false);
+addEventListener("keydown",e=>{if(e.key==="ArrowLeft")go(-1);if(e.key==="ArrowRight")go(1);if(e.key==="Escape"&&tv)tvStop()});
+addEventListener("resize",place);
+apply();sync();render();tick();
+try{if(!localStorage.getItem("muro_guia")){guide();localStorage.setItem("muro_guia","1")}}catch(e){}
+</script>
+</body>
+</html>
