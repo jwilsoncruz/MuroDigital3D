@@ -1,0 +1,21 @@
+# Historial de versiones
+
+- **v1.12.0** · Versión para GitHub Pages: carga config.json del repositorio y botón para descargar config.json con tus cambios.
+- **v1.11.0** · Guardado en la nube (configuración y logos se ven igual en cualquier equipo), color de anillo propio por auspiciador (auto desde el logo o elegido a mano), anillos de luz más grandes con control de tamaño.
+- **v1.10.0** · Logo del anfitrión repetido entre los auspiciadores en todas las vistas (individual, en línea, mosaico, ajedrez, anillo y presentación), favicon con el logo del anfitrión y corrección: el carrusel en línea ya no se queda detenido.
+- **v1.9.0** · Anillo de luz con el color de cada auspiciador: en línea/individual (marco pulsante del logo activo) y en Presentación (ondas, foco y marco; 3 ondas Platino, 2 Oro, 1 Plata).
+- **v1.8.1** · Intercalado en diagonal también en Ajedrez y tema listo Muro de prensa.
+- **v1.8.0** · Auspiciadores repetidos intercalados (en diagonal), fondo con imagen o carrusel de imágenes, estilo muro de prensa y logo/marca del anfitrión.
+- **v1.7.0** · Opción para repetir auspiciadores y llenar la pantalla cuando son pocos (en línea, mosaico, ajedrez y anillo).
+- **v1.6.1** · Favicon (icono de la pestaña) agregado.
+- **v1.6.0** · QR y enlace por auspiciador, sonido suave, reporte de apariciones, 4 temas listos, PIN para la configuración y duración por vista en el modo TV.
+- **v1.5.0** · Presentación: más tiempo para Platino y Oro, lema opcional; modo TV: fondo animado premium.
+- **v1.4.3** · Modo TV: la vista Presentación (con los círculos que crecen) se agrega automáticamente a la rotación y va primero.
+- **v1.4.2** · Modo TV: los círculos de la Presentación usan un método compatible con más navegadores y TVs, y se limpiaron estilos que se pisaban.
+- **v1.4.1** · Presentación: los círculos que crecen ahora se centran siempre en el logo (también en modo TV) y son tres ondas.
+- **v1.4.0** · Modo TV limpio: sin títulos, menús ni textos; solo auspiciadores a pantalla completa, con una animación de entrada distinta en cada rotación y opción de mostrar nombres.
+- **v1.3.1** · Botones visibles de Modo TV, Configuración y Guía debajo del menú de vistas.
+- **v1.3.0** · Guía de inicio rápido, versión visible, vista Presentación, 5 animaciones de entrada (y aleatoria) y destello brillante.
+- **v1.2.0** · Fondo de la página y de los cuadros.
+- **v1.1.0** · Panel de configuración, modo TV y Anillo 3D.
+- **v1.0.0** · Muro inicial: Individual, En línea, Mosaico y Ajedrez.

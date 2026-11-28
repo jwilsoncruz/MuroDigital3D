@@ -1,0 +1,102 @@
+{
+ "fx": "particulas",
+ "anim": "giro",
+ "shine": true,
+ "bg": "",
+ "tileBg": "hue",
+ "tileColor": "#1c2340",
+ "title": "Muro de Auspiciadores",
+ "sub": "Elige cómo quieres verlos",
+ "accent": "#d9b76a",
+ "theme": "auto",
+ "tilt": 1,
+ "speed": 2.8,
+ "tvSecs": 12,
+ "tvModes": [
+  "presentacion",
+  "linea",
+  "mosaico",
+  "ajedrez",
+  "anillo",
+  "individual"
+ ],
+ "mode": "linea",
+ "sp": [
+  {
+   "n": "Aurora Bank",
+   "t": "Platino",
+   "h": 210,
+   "img": ""
+  },
+  {
+   "n": "Nexo Telecom",
+   "t": "Platino",
+   "h": 265,
+   "img": ""
+  },
+  {
+   "n": "Volta Energy",
+   "t": "Oro",
+   "h": 45,
+   "img": ""
+  },
+  {
+   "n": "Andes Motors",
+   "t": "Oro",
+   "h": 8,
+   "img": ""
+  },
+  {
+   "n": "Solaris Foods",
+   "t": "Oro",
+   "h": 32,
+   "img": ""
+  },
+  {
+   "n": "Kairos Capital",
+   "t": "Oro",
+   "h": 285,
+   "img": ""
+  },
+  {
+   "n": "Zenit Tech",
+   "t": "Plata",
+   "h": 190,
+   "img": ""
+  },
+  {
+   "n": "Orbita Media",
+   "t": "Plata",
+   "h": 330,
+   "img": ""
+  },
+  {
+   "n": "Lumen Salud",
+   "t": "Plata",
+   "h": 150,
+   "img": ""
+  },
+  {
+   "n": "Terra Agro",
+   "t": "Plata",
+   "h": 110,
+   "img": ""
+  },
+  {
+   "n": "Vértice Seguros",
+   "t": "Plata",
+   "h": 240,
+   "img": ""
+  },
+  {
+   "n": "Pampa Brew",
+   "t": "Plata",
+   "h": 20,
+   "img": ""
+  }
+ ],
+ "host": {
+  "name": "Nombre del anfitrión",
+  "img": ""
+ }
+}
